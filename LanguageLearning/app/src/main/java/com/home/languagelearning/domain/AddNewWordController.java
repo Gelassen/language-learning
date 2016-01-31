@@ -34,7 +34,7 @@ public class AddNewWordController {
     }
 
     public boolean nextPage() {
-        return ++page > MAX_PAGE;
+        return ++page <= MAX_PAGE;
     }
 
     public void save(Context context) {

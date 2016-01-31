@@ -7,13 +7,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.home.languagelearning.App;
 import com.home.languagelearning.R;
 import com.home.languagelearning.domain.AddNewWordController;
 
@@ -35,25 +37,39 @@ public class AppDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), getTheme());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), getTheme());
         View myView = LayoutInflater.from(getContext())
                 .inflate(R.layout.activity_new_word, (ViewGroup) getView(), false);
-        alertDialog.setTitle(R.string.new_word_title_origin);
-        alertDialog.setView(myView);
-        alertDialog.setPositiveButton(R.string.dialog_positive_btn, onPositiveListener);
-        alertDialog.setNegativeButton(R.string.dialog_negative_btn, onNegativeListener);
-        return alertDialog.show();
+        builder.setTitle(R.string.new_word_title_origin);
+        builder.setView(myView);
+        builder.setPositiveButton(R.string.dialog_positive_btn, null);
+        builder.setNegativeButton(R.string.dialog_negative_btn, onNegativeListener);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(onPositiveListener);
+            }
+        });
+
+        return alertDialog;
     }
 
-    private DialogInterface.OnClickListener onPositiveListener = new DialogInterface.OnClickListener() {
+    private View getDialogView() {
+        return getDialog().findViewById(R.id.root);
+    }
+
+    private View.OnClickListener onPositiveListener = new View.OnClickListener() {
         @Override
-        public void onClick(DialogInterface dialog, int which) {
+        public void onClick(View v) {
             boolean next = addNewWordController.nextPage();
             if (next) {
-                obtainOrigin(getView());
-                showNextPage(getView());
+                obtainOrigin(getDialogView());
+                showNextPage(getDialogView());
             } else {
-                processData(getView());
+                processData(getDialogView());
                 dismiss();
             }
         }
@@ -70,7 +86,7 @@ public class AppDialogFragment extends DialogFragment {
             titleView.setText(R.string.new_word_title_translation);
             // clear text view
             EditText input = (EditText) root.findViewById(R.id.add_new_word_text);
-            input.clearComposingText();
+            input.setText("");
         }
 
         private void processData(final View root) {
@@ -84,6 +100,7 @@ public class AppDialogFragment extends DialogFragment {
                 addNewWordController.save(getContext());
             } else {
                 // TODO show error
+                Log.d(App.TAG, "Failed to process data. Data are not valid");
             }
         }
     };

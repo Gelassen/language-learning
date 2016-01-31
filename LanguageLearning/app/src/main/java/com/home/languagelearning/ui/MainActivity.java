@@ -61,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        AppDialogFragment.newInstance(Bundle.EMPTY).show(getSupportFragmentManager(), AppDialogFragment.TAG);
-
     }
 
 
@@ -82,7 +79,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_new_word) {
+            AppDialogFragment.newInstance(Bundle.EMPTY)
+                    .show(getSupportFragmentManager(), AppDialogFragment.TAG);
             return true;
         }
 
