@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        AppDialogFragment.newInstance(Bundle.EMPTY).show(getSupportFragmentManager(), AppDialogFragment.TAG);
+
     }
 
 

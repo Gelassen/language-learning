@@ -163,7 +163,7 @@ public class AppContentProvider extends ContentProvider {
     private final static int MATCH_CARD = 0x00000001;
 
     static {
-        match(Contract.LifeClubsTable.class, MATCH_CARD);
+        match(Contract.CardsTable.class, MATCH_CARD);
     }
 
     // TODO consider repalce it if associated uri grows to many-to-many reference
