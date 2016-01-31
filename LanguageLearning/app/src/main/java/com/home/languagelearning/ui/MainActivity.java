@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        fab.setVisibility(View.GONE);
 
         getSupportLoaderManager().initLoader(0, Bundle.EMPTY, this);
     }

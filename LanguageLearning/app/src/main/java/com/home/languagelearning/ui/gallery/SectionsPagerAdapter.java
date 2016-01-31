@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.home.languagelearning.model.ChineseToEnglishCard;
 import com.home.languagelearning.model.ICard;
+import com.home.languagelearning.model.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,10 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
         ChineseToEnglishCard card = datasource.get(position);
-        return PlaceholderFragment.newInstance(card);
+        Page page = new Page();
+        page.setCurrent(position);
+        page.setTotal(getCount());
+        return PlaceholderFragment.newInstance(card, page);
     }
 
     @Override
