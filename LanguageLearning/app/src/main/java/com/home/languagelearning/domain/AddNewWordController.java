@@ -14,7 +14,7 @@ import com.home.languagelearning.storage.Contract;
 public class AddNewWordController {
     private static final int MAX_PAGE = 2;
     private int page;
-    private ICard card;
+    private ChineseToEnglishCard card;
 
     public AddNewWordController() {
         card = new ChineseToEnglishCard();

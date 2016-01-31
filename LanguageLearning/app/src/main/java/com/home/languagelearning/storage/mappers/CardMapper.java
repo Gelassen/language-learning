@@ -18,7 +18,7 @@ public class CardMapper implements IDataMapper<ChineseToEnglishCard> {
 
     @Override
     public ChineseToEnglishCard createFromCursor(Cursor cursor) {
-        if (inputIsValid(cursor)) return new ChineseToEnglishCard();
+        if (!inputIsValid(cursor)) return new ChineseToEnglishCard();
         initializeIndexes(cursor);
 
         ChineseToEnglishCard card = new ChineseToEnglishCard();
@@ -29,7 +29,7 @@ public class CardMapper implements IDataMapper<ChineseToEnglishCard> {
 
     @Override
     public List<ChineseToEnglishCard> createListFromCursor(Cursor cursor) {
-        if (inputIsValid(cursor)) return new ArrayList<>();
+        if (!inputIsValid(cursor)) return new ArrayList<>();
         initializeIndexes(cursor);
 
         List<ChineseToEnglishCard> result = new ArrayList<>();
