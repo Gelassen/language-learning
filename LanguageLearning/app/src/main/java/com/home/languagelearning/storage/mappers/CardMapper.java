@@ -2,6 +2,7 @@ package com.home.languagelearning.storage.mappers;
 
 import android.database.Cursor;
 
+import com.home.languagelearning.BuildConfig;
 import com.home.languagelearning.model.ChineseToEnglishCard;
 import com.home.languagelearning.storage.Contract;
 
@@ -15,6 +16,19 @@ public class CardMapper implements IDataMapper<ChineseToEnglishCard> {
 
     private int originIdx = NOT_INITIALIZED;
     private int translationIdx = NOT_INITIALIZED;
+
+    @Override
+    public ChineseToEnglishCard createFromCursor(Cursor cursor, int pos) {
+        if (BuildConfig.DEBUG && pos >= cursor.getCount()) {
+            final String exception = "This position is out of range: " + pos + " vs " + cursor.getCount();
+            throw new IllegalArgumentException(exception);
+        }
+
+        if (!inputIsValid(cursor)) return new ChineseToEnglishCard();
+        initializeIndexes(cursor);
+        cursor.moveToPosition(pos);
+        return createFromCursor(cursor);
+    }
 
     @Override
     public ChineseToEnglishCard createFromCursor(Cursor cursor) {

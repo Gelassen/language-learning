@@ -1,4 +1,4 @@
-package com.home.languagelearning.ui;
+package com.home.languagelearning.ui.gallery;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,26 +10,21 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import com.home.languagelearning.App;
 import com.home.languagelearning.R;
 import com.home.languagelearning.model.ChineseToEnglishCard;
-import com.home.languagelearning.model.ICard;
 import com.home.languagelearning.storage.Contract;
 import com.home.languagelearning.storage.mappers.CardMapper;
 import com.home.languagelearning.ui.gallery.SectionsPagerAdapter;
+import com.home.languagelearning.ui.newworld.AppDialogFragment;
 
 import java.util.List;
 

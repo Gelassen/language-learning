@@ -9,6 +9,7 @@ import java.util.List;
  */
 public interface IDataMapper<T> {
     int NOT_INITIALIZED = -1;
+    T createFromCursor(final Cursor cursor, final int pos);
     T createFromCursor(final Cursor cursor);
     List<T> createListFromCursor(final Cursor cursor);
     void initializeIndexes(final Cursor cursor);
