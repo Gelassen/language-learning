@@ -1,10 +1,12 @@
 package com.home.languagelearning.ui.gallery;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.home.languagelearning.domain.CardController;
 import com.home.languagelearning.model.ChineseToEnglishCard;
 import com.home.languagelearning.model.ICard;
 import com.home.languagelearning.model.Page;
@@ -18,6 +20,8 @@ import java.util.List;
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
+    private static final int PAGE_SHIFT = 1; // const to convert position from array to user's page
+
     private List<ChineseToEnglishCard> datasource = new ArrayList<>();
 
     public SectionsPagerAdapter(FragmentManager fm) {
@@ -30,7 +34,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         ChineseToEnglishCard card = datasource.get(position);
         Page page = new Page();
-        page.setCurrent(position);
+        page.setCurrent(position + PAGE_SHIFT);
         page.setTotal(getCount());
         return PlaceholderFragment.newInstance(card, page);
     }
@@ -40,9 +44,11 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         return datasource.size();
     }
 
-    public void updateDatasource(final List<ChineseToEnglishCard> data) {
+    public void updateDatasource(Context context, final List<ChineseToEnglishCard> data) {
         datasource.clear();
         datasource.addAll(data == null ? new ArrayList<ChineseToEnglishCard>() : data);
+
+        CardController.broadcastPageInfo(context, data == null ? 0 : data.size());
         notifyDataSetChanged();
     }
 

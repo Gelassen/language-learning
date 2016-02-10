@@ -116,11 +116,11 @@ public class MainActivity extends AppCompatActivity
         Log.d(App.TAG, "Data size: " + data.getCount());
         CardMapper cardMapper = new CardMapper();
         List<ChineseToEnglishCard> cards = cardMapper.createListFromCursor(data);
-        sectionsPagerAdapter.updateDatasource(cards);
+        sectionsPagerAdapter.updateDatasource(this, cards);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        sectionsPagerAdapter.updateDatasource(null);
+        sectionsPagerAdapter.updateDatasource(this, null);
     }
 }
