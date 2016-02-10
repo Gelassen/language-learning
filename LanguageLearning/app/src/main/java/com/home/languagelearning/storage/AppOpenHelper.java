@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.home.languagelearning.App;
+import com.home.languagelearning.storage.migration.Migration;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,14 +15,16 @@ import java.util.List;
 
 /*package*/ class AppOpenHelper extends SQLiteOpenHelper {
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final String DATABASE = "store.db";
 
+    private Migration migration;
     private final Context context;
 
     public AppOpenHelper(Context context) {
         super(context, DATABASE, null, VERSION);
         this.context = context;
+        migration = new Migration();
     }
 
     @Override
@@ -32,10 +35,13 @@ import java.util.List;
         for (Class<Contract.View> view : getViews()) {
             db.execSQL(getViewDDL(view));
         }
+        migration.initByBackup(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        migration.backupInRuntimeMemory(db);
+
         for (Class<Contract.Table> table : getTables()) {
             db.execSQL("drop table if exists " + Contract.getTableName(table));
         }

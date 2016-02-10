@@ -81,6 +81,8 @@ public class Contract {
         final static String _SQL_ID_TYPE = _PK_AUTOINCREMENT;
         public final static String CHINESE = "CHINESE";
         public final static String ENGLISH = "ENGLISH";
+        public final static String LEARNED = "LEARNED";
+        final static String _SQL_LEARNED_TYPE = _TYPE_INTEGER;
 //        public final static String _SQL_UNIQUE = TAG;
     }
 
