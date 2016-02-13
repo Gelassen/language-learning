@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
         // Set up the ViewPager with the sections adapter.
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(0);
 
         cardController = new CardController(null);
 
