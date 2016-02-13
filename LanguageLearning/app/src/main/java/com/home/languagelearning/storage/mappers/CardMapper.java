@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class CardMapper implements IDataMapper<ChineseToEnglishCard> {
 
+    private int idIdx = NOT_INITIALIZED;
     private int originIdx = NOT_INITIALIZED;
     private int translationIdx = NOT_INITIALIZED;
 
@@ -36,6 +37,7 @@ public class CardMapper implements IDataMapper<ChineseToEnglishCard> {
         initializeIndexes(cursor);
 
         ChineseToEnglishCard card = new ChineseToEnglishCard();
+        card.setId(cursor.getInt(idIdx));
         card.setOrigin(cursor.getString(originIdx));
         card.setTranslation(cursor.getString(translationIdx));
         return card;
@@ -56,6 +58,7 @@ public class CardMapper implements IDataMapper<ChineseToEnglishCard> {
     @Override
     public void initializeIndexes(Cursor cursor) {
         if (inputIsValid(cursor) && originIdx == NOT_INITIALIZED) {
+            idIdx = cursor.getColumnIndex(Contract.CardsTable.ID);
             originIdx = cursor.getColumnIndex(Contract.CardsTable.CHINESE);
             translationIdx = cursor.getColumnIndex(Contract.CardsTable.ENGLISH);
         }

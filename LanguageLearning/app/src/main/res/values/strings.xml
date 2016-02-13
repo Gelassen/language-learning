@@ -12,4 +12,5 @@
     <string name="dialog_positive_btn">OK</string>
     <string name="dialog_negative_btn">Cancel</string>
     <string name="dialog_hint">Add text here</string>
+    <string name="action_known_word">Known words</string>
 </resources>

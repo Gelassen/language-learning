@@ -1,5 +1,6 @@
 package com.home.languagelearning.ui.gallery;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -20,10 +21,10 @@ import android.view.View;
 
 import com.home.languagelearning.App;
 import com.home.languagelearning.R;
+import com.home.languagelearning.domain.CardController;
 import com.home.languagelearning.model.ChineseToEnglishCard;
 import com.home.languagelearning.storage.Contract;
 import com.home.languagelearning.storage.mappers.CardMapper;
-import com.home.languagelearning.ui.gallery.SectionsPagerAdapter;
 import com.home.languagelearning.ui.newworld.AppDialogFragment;
 
 import java.util.List;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity
      */
     private SectionsPagerAdapter sectionsPagerAdapter;
 
+    private CardController cardController;
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,16 +65,20 @@ public class MainActivity extends AppCompatActivity
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
 
+        cardController = new CardController(null);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                ChineseToEnglishCard card = sectionsPagerAdapter.getDataItemForCurrentPosition(viewPager);
+                cardController.updateCard(MainActivity.this, card);
+
+                // update user with status
+                Snackbar.make(view, "Word has been marked as learned and moved out from exercise", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-        fab.setVisibility(View.GONE);
 
         getSupportLoaderManager().initLoader(0, Bundle.EMPTY, this);
     }
@@ -91,10 +99,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_new_word) {
-            AppDialogFragment.newInstance(Bundle.EMPTY)
-                    .show(getSupportFragmentManager(), AppDialogFragment.TAG);
-            return true;
+        switch (id) {
+            case R.id.action_new_word:
+                AppDialogFragment.newInstance(Bundle.EMPTY)
+                        .show(getSupportFragmentManager(), AppDialogFragment.TAG);
+                break;
+            case R.id.action_known_words:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -103,7 +116,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = Contract.contentUri(Contract.CardsTable.class);
-        return new CursorLoader(this, uri, null, null, null, null);
+        final String selection = Contract.CardsTable.LEARNED + "=? OR " + Contract.CardsTable.LEARNED + " IS NULL";
+        final String[] selectionArgs = new String[] { "0" };
+        return new CursorLoader(this, uri, null, selection, selectionArgs, null);
     }
 
     @Override

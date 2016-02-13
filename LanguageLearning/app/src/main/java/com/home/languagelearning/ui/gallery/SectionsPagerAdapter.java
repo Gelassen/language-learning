@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.ViewParent;
 
 import com.home.languagelearning.domain.CardController;
 import com.home.languagelearning.model.ChineseToEnglishCard;
@@ -42,6 +44,14 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return datasource.size();
+    }
+
+    public ChineseToEnglishCard getDataItemForCurrentPosition(final ViewPager viewPager) {
+        final int position = viewPager.getCurrentItem();
+        if (position >= datasource.size()) {
+            throw new IllegalStateException("Position is our of range");
+        }
+        return datasource.get(position);
     }
 
     public void updateDatasource(Context context, final List<ChineseToEnglishCard> data) {
