@@ -9,7 +9,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import com.home.languagelearning.App;
 import com.home.languagelearning.R;
 import com.home.languagelearning.storage.Contract;
 
@@ -30,6 +32,8 @@ public class LearnedWordsActivity extends AppCompatActivity implements LoaderMan
         RecyclerView list = (RecyclerView) findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(this));
+
+        getSupportLoaderManager().initLoader(0, Bundle.EMPTY, this);
     }
 
     @Override
@@ -42,6 +46,7 @@ public class LearnedWordsActivity extends AppCompatActivity implements LoaderMan
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d(App.TAG, "Known words: " + data.getCount());
         adapter.update(data);
     }
 

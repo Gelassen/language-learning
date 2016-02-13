@@ -25,6 +25,7 @@ import com.home.languagelearning.domain.CardController;
 import com.home.languagelearning.model.ChineseToEnglishCard;
 import com.home.languagelearning.storage.Contract;
 import com.home.languagelearning.storage.mappers.CardMapper;
+import com.home.languagelearning.ui.knownword.LearnedWordsActivity;
 import com.home.languagelearning.ui.newworld.AppDialogFragment;
 
 import java.util.List;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity
                         .show(getSupportFragmentManager(), AppDialogFragment.TAG);
                 break;
             case R.id.action_known_words:
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, LearnedWordsActivity.class);
                 startActivity(intent);
                 break;
         }

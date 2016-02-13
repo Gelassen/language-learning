@@ -2,6 +2,7 @@ package com.home.languagelearning.ui.knownword;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,7 +25,8 @@ public class KnownWordsAdapter extends RecyclerView.Adapter<ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             default:
-                View view = parent.inflate(parent.getContext(), R.layout.component_item_known_word, parent);
+                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+                View view = inflater.inflate(R.layout.component_item_known_word, parent, false);
                 ViewHolder viewHolder = new ViewHolder(view);
                 return viewHolder;
         }
