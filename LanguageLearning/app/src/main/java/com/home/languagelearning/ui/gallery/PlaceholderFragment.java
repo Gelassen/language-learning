@@ -91,6 +91,12 @@ public class PlaceholderFragment extends Fragment implements CardBroadcastReceiv
         updatePage(page);
     }
 
+    public ChineseToEnglishCard getCard() {
+        Bundle args = getArguments();
+        ChineseToEnglishCard card = args.getParcelable(ARG_CARD);
+        return card;
+    }
+
     private Page getPageFromArgs() {
         Bundle args = getArguments();
         return args.getParcelable(ARG_PAGE);

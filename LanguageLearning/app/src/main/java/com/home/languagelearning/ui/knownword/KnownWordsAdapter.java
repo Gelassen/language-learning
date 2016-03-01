@@ -45,5 +45,6 @@ public class KnownWordsAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public void update(Cursor cursor) {
         datasource.update(cursor);
+        notifyDataSetChanged();
     }
 }

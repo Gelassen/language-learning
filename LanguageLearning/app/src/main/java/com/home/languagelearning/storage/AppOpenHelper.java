@@ -35,12 +35,12 @@ import java.util.List;
         for (Class<Contract.View> view : getViews()) {
             db.execSQL(getViewDDL(view));
         }
-        migration.initByBackup(db);
+//        migration.initByBackup(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        migration.backupInRuntimeMemory(db);
+//        migration.backupInRuntimeMemory(db);
 
         for (Class<Contract.Table> table : getTables()) {
             db.execSQL("drop table if exists " + Contract.getTableName(table));
