@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Language Learning</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_new_word">Add new word</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- Input new -->
@@ -12,5 +10,10 @@
     <string name="dialog_positive_btn">OK</string>
     <string name="dialog_negative_btn">Cancel</string>
     <string name="dialog_hint">Add text here</string>
+
+    <!-- Menu actions -->
     <string name="action_known_word">Known words</string>
+    <string name="action_export">Export</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_new_word">Add new word</string>
 </resources>

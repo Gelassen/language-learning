@@ -1,11 +1,15 @@
 package com.home.languagelearning.ui.gallery;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +29,7 @@ import com.home.languagelearning.domain.CardController;
 import com.home.languagelearning.model.ChineseToEnglishCard;
 import com.home.languagelearning.storage.Contract;
 import com.home.languagelearning.storage.mappers.CardMapper;
+import com.home.languagelearning.storage.migration.BackupManager;
 import com.home.languagelearning.ui.knownword.LearnedWordsActivity;
 import com.home.languagelearning.ui.newworld.AppDialogFragment;
 
@@ -32,6 +37,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int PERMISSION_REQUEST_CODE = 100;
+
+    static String[] permissions = new String[] {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -83,6 +94,12 @@ public class MainActivity extends AppCompatActivity
         });
 
         getSupportLoaderManager().initLoader(0, Bundle.EMPTY, this);
+
+        int  permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE);
+            // TODO consider case when user doesn't give permissions
+        }
     }
 
 
@@ -110,9 +127,20 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(this, LearnedWordsActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.action_export:
+                // TODO export data in excel
+                BackupManager backupManager = new BackupManager();
+                backupManager.export(this);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(App.TAG, "Result code: " + resultCode + " request code: " + requestCode);
     }
 
     @Override
