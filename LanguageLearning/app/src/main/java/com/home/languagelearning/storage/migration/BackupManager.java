@@ -2,28 +2,22 @@ package com.home.languagelearning.storage.migration;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
-import com.home.languagelearning.App;
+import com.home.languagelearning.model.ChineseToEnglishCard;
 import com.home.languagelearning.model.ExcelParams;
 import com.home.languagelearning.model.FileData;
+import com.home.languagelearning.storage.BaseAsyncQueryHandler;
+import com.home.languagelearning.storage.Contract;
+import com.home.languagelearning.storage.mappers.CardMapper;
+import com.home.languagelearning.storage.utils.FileManager;
 
-import java.io.IOException;
-
-import jxl.Workbook;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
+import java.util.List;
 
 /**
  * Created by dmitry.kazakov on 3/5/2016.
  */
-public class BackupManager {
+public class BackupManager implements BaseAsyncQueryHandler.QueryListener {
 
     private static final int PERMISSION_REQUEST_CODE = 100;
 
@@ -31,36 +25,41 @@ public class BackupManager {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    public void export(Activity context) {
-        // TODO ask for permissions
-        int  permission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(context, permissions, PERMISSION_REQUEST_CODE);
-            // TODO consider case when user doesn't give permissions
-        }
-        try {
+    public void export(Activity context, boolean debug) {
+        BaseAsyncQueryHandler asyncQueryHandler = new BaseAsyncQueryHandler(context.getContentResolver());
+        asyncQueryHandler.setListener(this, new CardMapper());
+        asyncQueryHandler.startQuery(0, null,
+                Contract.contentUriNoNotify(Contract.CardsTable.class),
+                null, null, null, null);
+    }
 
+    public void importWords() {
+        FileData<ChineseToEnglishCard> fileData = getFileData();
 
-            ExcelParams excelParams = new ExcelParams();
-            excelParams.setSheet("known words");
-            excelParams.setPositionOfSheet(0);
+        FileManager fileManager = new FileManager();
+        fileData = fileManager.read(fileData);
+        return;
+    }
 
-            FileData fileData = new FileData();
-            fileData.setExcelParams(excelParams);
-            fileData.setDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
-            fileData.setName("output.xls");
+    @Override
+    public void onQueryComplete(List result) {
+        FileData<ChineseToEnglishCard> fileData = getFileData();
+        fileData.setData(result);
 
-            WritableWorkbook workbook = Workbook.createWorkbook(fileData.getFile());
-            WritableSheet sheet = workbook.createSheet(fileData.getExcelParams().getSheet(), fileData.getExcelParams().getPositionOfSheet());
-            Label label = new Label(0, 2, "A label record");
-            sheet.addCell(label);
+        FileManager fileManager = new FileManager();
+        fileManager.write(fileData);
+    }
 
-            workbook.write();
-            workbook.close();
-        } catch (IOException e) {
-            Log.e(App.TAG, "Failed to operate with workbook", e);
-        } catch (WriteException e) {
-            Log.e(App.TAG, "Failed to write into workbook", e);
-        }
+    private FileData<ChineseToEnglishCard> getFileData() {
+        ExcelParams excelParams = new ExcelParams();
+        excelParams.setSheet("known words");
+        excelParams.setPositionOfSheet(0);
+
+        FileData<ChineseToEnglishCard> fileData = new FileData<>();
+        fileData.setExcelParams(excelParams);
+        fileData.setDirectory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
+        fileData.setName("learning_words_backup.xls");
+
+        return fileData;
     }
 }

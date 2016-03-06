@@ -60,6 +60,10 @@ public class ChineseToEnglishCard implements ICard, Parcelable {
         knownCard = known;
     }
 
+    public boolean isKnown() {
+        return knownCard;
+    }
+
     @Override
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues(3);

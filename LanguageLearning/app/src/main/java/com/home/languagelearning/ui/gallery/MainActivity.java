@@ -130,7 +130,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_export:
                 // TODO export data in excel
                 BackupManager backupManager = new BackupManager();
-                backupManager.export(this);
+                backupManager.export(this, true);
+                break;
+            case R.id.action_import:
+                backupManager = new BackupManager();
+                backupManager.importWords();
                 break;
         }
 
